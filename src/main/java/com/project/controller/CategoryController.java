@@ -1,54 +1,51 @@
 package com.project.controller;
 
+import com.project.model.Category;
 import com.project.model.Customer;
 import com.project.response.ResponseResult;
+import com.project.service.CategoryService;
 import com.project.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/category")
 @RequiredArgsConstructor
-
-public class CustomerController {
-
+public class CategoryController {
     @Autowired
-    private CustomerService customerService;
+    private CategoryService categoryService;
 
-    @GetMapping("/getAllCustomer")
+    @GetMapping("/getAllCategory")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    List<Customer> getAll(){
-        return customerService.getAllCustomer();
+    List<Category> getAll(){
+        return categoryService.getAllCategory();
     }
 
 
     @GetMapping("/{id}")
         //Let's return an object with: data, message, status
     ResponseEntity<ResponseResult> findById(@PathVariable Long id) {
-        return customerService.findById(id);
+        return categoryService.findById(id);
     }
 
     @PostMapping("/insert")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    ResponseEntity<ResponseResult> insertProduct(@RequestBody Customer newCus) {
-        return customerService.insertCus(newCus);
+    ResponseEntity<ResponseResult> insertCategory(@RequestBody Category newCat) {
+        return categoryService.insertCategory(newCat);
 
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ResponseResult> updateCustomer(@RequestBody Customer newCus, @PathVariable Long id) {
-        return customerService.updateCustomer(newCus,id);
+    ResponseEntity<ResponseResult> updateCategory(@RequestBody Category newCat, @PathVariable Long id) {
+        return categoryService.updateCategory(newCat,id);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<ResponseResult> deleteCustomer(@PathVariable Long id) {
-        return customerService.deleteCustomer(id);
+    ResponseEntity<ResponseResult> deleteCategory(@PathVariable Long id) {
+        return categoryService.deleteCategory(id);
     }
-
-
 }
