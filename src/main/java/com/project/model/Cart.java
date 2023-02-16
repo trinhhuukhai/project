@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -24,12 +25,10 @@ public class Cart {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date createdDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
+    @UpdateTimestamp
+    private Date updateDate;
 }

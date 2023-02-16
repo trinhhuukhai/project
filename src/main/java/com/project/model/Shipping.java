@@ -20,9 +20,9 @@ public class Shipping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "order_id", nullable = false)
+//    private Order order;
 
     @Column(name = "shipping_method")
     private String shippingMethod;

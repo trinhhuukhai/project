@@ -23,12 +23,12 @@ public class CustomerService {
 
     public ResponseEntity<ResponseResult> insertCus(Customer newCus) {
         //2 products must not have the same name !
-        List<Customer> foundCus = customerRepository.findByName(newCus.getName().trim());
-        if(foundCus.size() > 0) {
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                    new ResponseResult("failed", "Customer name already taken", "")
-            );
-        }
+//        List<Customer> foundCus = customerRepository.findByName(newCus.getName().trim());
+//        if(foundCus.size() > 0) {
+//            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+//                    new ResponseResult("failed", "Customer name already taken", "")
+//            );
+//        }
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseResult("ok", "Insert Customer successfully", customerRepository.save(newCus))
         );
