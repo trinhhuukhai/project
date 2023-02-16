@@ -68,6 +68,7 @@ public class CategoryService {
     }
 
     //Let's return an object with: data, message, status
+    //Optional: co the null
     public ResponseEntity<ResponseResult> findById(@PathVariable Long id) {
         Optional<Category> foundCategory = categoryRepository.findById(id);
         return foundCategory.isPresent() ?

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -37,18 +36,14 @@ public class Product {
     private String color;
 
     @Column(name = "inventory")
-    private String inventory;
+    private int inventory;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name = "product_description")
-    private String productDescription;
 
     @Column(name = "product_image")
     private String productImage;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
 }

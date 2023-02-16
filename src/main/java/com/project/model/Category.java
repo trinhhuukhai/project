@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,5 +26,6 @@ public class Category {
 
     @Column(name = "description")
     private String description;
+
 
 }
