@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,9 +36,10 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<ResponseResult> insertProduct(@RequestBody ProductRequest newPro) {
+    public ResponseEntity<ResponseResult> insertProduct( ProductRequest newPro, MultipartFile file) {
         List<Product> foundPro = productRepository.findByName(newPro.getName().trim());
 
+        String generatedFileName = storageService.storageFile(file);
         if(foundPro.size() > 0) {
 
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
@@ -54,11 +57,13 @@ public class ProductService {
         product.setColor(newPro.getColor());
         product.setInventory(newPro.getInventory());
         product.setCategory(category);
-        product.setProductImage(newPro.getProductImage());
+        product.setProductImage(generatedFileName);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseResult("ok", "Insert Product successfully",productRepository.save(product))
         );
+
+
     }
 
     public ResponseEntity<ResponseResult> updateProduct(@RequestBody ProductRequest newPro, @PathVariable Long id) {

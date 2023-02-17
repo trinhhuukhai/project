@@ -8,8 +8,10 @@ import com.project.response.ResponseResult;
 import com.project.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,9 +36,9 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    @PostMapping("/insert")
-    ResponseEntity<ResponseResult> insertProduct(@RequestBody ProductRequest newPro) {
-        return productService.insertProduct(newPro);
+    @PostMapping(value = {"/insert"})
+    ResponseEntity<ResponseResult> insertProduct( @RequestBody ProductRequest newPro,@RequestParam("file")MultipartFile file ) {
+        return productService.insertProduct(newPro, file);
 
     }
 
