@@ -37,8 +37,8 @@ public class ProductController {
     }
 
     @PostMapping(value = {"/insert"})
-    ResponseEntity<ResponseResult> insertProduct( @RequestBody ProductRequest newPro,@RequestParam("file")MultipartFile file ) {
-        return productService.insertProduct(newPro, file);
+    ResponseEntity<ResponseResult> insertProduct( @RequestBody ProductRequest newPro) {
+        return productService.insertProduct(newPro);
 
     }
 

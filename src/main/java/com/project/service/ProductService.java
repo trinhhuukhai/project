@@ -36,10 +36,10 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<ResponseResult> insertProduct( ProductRequest newPro, MultipartFile file) {
+    public ResponseEntity<ResponseResult> insertProduct( ProductRequest newPro) {
         List<Product> foundPro = productRepository.findByName(newPro.getName().trim());
 
-        String generatedFileName = storageService.storageFile(file);
+
         if(foundPro.size() > 0) {
 
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
@@ -57,7 +57,7 @@ public class ProductService {
         product.setColor(newPro.getColor());
         product.setInventory(newPro.getInventory());
         product.setCategory(category);
-        product.setProductImage(generatedFileName);
+        product.setProductImage(newPro.getProductImage());
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseResult("ok", "Insert Product successfully",productRepository.save(product))
