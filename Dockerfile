@@ -1,5 +1,5 @@
 FROM openjdk:17-alpine
 VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} project.jar
+LABEL maintainer="katz"
+ADD target/project-0.0.1-SNAPSHOT.jar project.jar
 ENTRYPOINT ["java","-jar","/project.jar"]
