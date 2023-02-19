@@ -1,11 +1,4 @@
-FROM openjdk:17
-WORKDIR /app
-
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
-
-RUN ./mvnw package
-COPY target/*.jar project.jar
-ENTRYPOINT ["java","-jar","project.jar"]
+FROM openjdk:17-alpine
+VOLUME /tmp
+ADD target/*.jar project.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/project.jar"]
