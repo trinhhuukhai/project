@@ -5,7 +5,7 @@ WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 #Run this inside the image
-RUN /bin/bash./mvnw dependency:go-offline./mvnw dependency:go-offline
+RUN ./mvnw dependency:go-offline./mvnw dependency:go-offline
 COPY src ./src
 #run inside container
 CMD ["./mvnw", "spring-boot:run"]
