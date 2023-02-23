@@ -1,5 +1,6 @@
 package com.project.dto.response;
 
+import com.project.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,7 @@ public class AuthResponse {
     private String name;
     private String address;
     private String roleName;
+//    private User user;
+
+
 }

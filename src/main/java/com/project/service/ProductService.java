@@ -8,6 +8,10 @@ import com.project.repository.ProductRepository;
 import com.project.response.ResponseResult;
 import com.project.service.iService.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -57,7 +61,11 @@ public class ProductService {
         product.setColor(newPro.getColor());
         product.setInventory(newPro.getInventory());
         product.setCategory(category);
-        product.setProductImage(newPro.getProductImage());
+
+        String productImage = storageService.storageFile(newPro.getProductImage());
+
+
+        product.setProductImage(productImage);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseResult("ok", "Insert Product successfully",productRepository.save(product))
@@ -66,25 +74,25 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<ResponseResult> updateProduct(@RequestBody ProductRequest newPro, @PathVariable Long id) {
-
-        Category category = categoryRepository.findById(newPro.getCategoryId()).orElseThrow();
-        Optional<Product> updatedPro = productRepository.findById(id)
-                .map(pro -> {
-                    pro.setName(newPro.getName());
-                    pro.setDescription(newPro.getDescription());
-                    pro.setPrice(newPro.getPrice());
-                    pro.setBrand(newPro.getBrand());
-                    pro.setColor(newPro.getColor());
-                    pro.setInventory(newPro.getInventory());
-                    pro.setCategory(category);
-                    pro.setProductImage(newPro.getProductImage());
-                    return productRepository.save(pro);
-                });
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update Customer successfully", updatedPro)
-        );
-    }
+//    public ResponseEntity<ResponseResult> updateProduct(@RequestBody ProductRequest newPro, @PathVariable Long id) {
+//
+//        Category category = categoryRepository.findById(newPro.getCategoryId()).orElseThrow();
+//        Optional<Product> updatedPro = productRepository.findById(id)
+//                .map(pro -> {
+//                    pro.setName(newPro.getName());
+//                    pro.setDescription(newPro.getDescription());
+//                    pro.setPrice(newPro.getPrice());
+//                    pro.setBrand(newPro.getBrand());
+//                    pro.setColor(newPro.getColor());
+//                    pro.setInventory(newPro.getInventory());
+//                    pro.setCategory(category);
+//                    pro.setProductImage(newPro.getProductImage());
+//                    return productRepository.save(pro);
+//                });
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseResult("ok", "Update Customer successfully", updatedPro)
+//        );
+//    }
 
     //Delete a Product => DELETE method
     public ResponseEntity<ResponseResult> deleteProduct(@PathVariable Long id) {
@@ -113,7 +121,24 @@ public class ProductService {
                 );
     }
 
-    //Let's return an object with: data, message, status
+    public Page<Product> getProductPagination(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return productRepository.findAll(pageable);
+    }
+
+    public Page<Product> getProductPaginationAndSort(Integer pageNumber, Integer pageSize , String field) {
+        Pageable pageable = null;
+        if (null != field){
+            pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC,field);
+
+        }else {
+            pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.ASC,"name");
+
+        }
+        return productRepository.findAll(pageable);
+    }
+
+        //Let's return an object with: data, message, status
     //Optional: co the null
 
 

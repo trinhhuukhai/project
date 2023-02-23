@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(path = "/api/v1/FileUpload")
+@RequestMapping(path = "/api/v1/getFile")
 public class FileUploadController {
     //this controller receive file/image from client
 
@@ -40,7 +40,7 @@ public class FileUploadController {
     }
 
     //get image url
-    @GetMapping("/files/{fileName:.+}")
+    @GetMapping("/{fileName:.+}")
     public ResponseEntity<byte[]> readDetailFile(@PathVariable String fileName){
         try {
             byte[] bytes = storageService.readFileContent(fileName);

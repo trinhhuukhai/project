@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
     @GetMapping({"/api/admin/forAdmin"})
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> sayHello(){
         return ResponseEntity.ok("ok, hello xin chao cac ban");
     }

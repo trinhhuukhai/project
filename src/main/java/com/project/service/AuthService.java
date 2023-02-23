@@ -1,5 +1,6 @@
 package com.project.service;
 
+import com.project.model.Cart;
 import com.project.model.Role;
 import com.project.model.Token;
 import com.project.model.User;
@@ -76,6 +77,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtToken)
+//                .user(user)
                 .roleName(String.valueOf(user.getRole()))
                 .name(user.getName())
                 .username(user.getUsername())
@@ -83,14 +85,11 @@ public class AuthService {
                 .build();
     }
 
-    public ResponseResult logout(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (org.springframework.util.StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            tokenService.deleteToken(bearerToken.substring(7));
-            return ResponseResult.success("Thành công");
-        }
-        return new ResponseResult(ResponseCode.ERROR);
+    public List<User> getAllUser(){
+        return userRepository.findAll();
     }
+
+
 
 
 }
