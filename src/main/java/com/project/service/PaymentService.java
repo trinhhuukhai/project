@@ -27,7 +27,7 @@ public class PaymentService {
     public ResponseEntity<ResponseResult> insertPay(Payment newPay) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Customer successfully", paymentRepository.save(newPay))
+                new ResponseResult("ok", "Insert Customer successfully", paymentRepository.save(newPay),1)
         );
     }
 
@@ -44,7 +44,7 @@ public class PaymentService {
                     return paymentRepository.save(newPay);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update shipping successfully", updatedPay)
+                new ResponseResult("ok", "Update shipping successfully", updatedPay,1)
         );
     }
 
@@ -54,11 +54,11 @@ public class PaymentService {
         if(exists) {
             paymentRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete payment successfully", "")
+                    new ResponseResult("ok", "Delete payment successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find payment to delete", "")
+                new ResponseResult("failed", "Cannot find payment to delete", "",1)
         );
     }
 
@@ -67,11 +67,11 @@ public class PaymentService {
         Optional<Payment> foundPay = paymentRepository.findById(id);
         return foundPay.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query payment successfully", foundPay)
+                        new ResponseResult("ok", "Query payment successfully", foundPay,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find payment with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find payment with id = "+id, "",1)
                 );
     }
 }

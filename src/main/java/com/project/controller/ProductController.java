@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
+@CrossOrigin("http://localhost:3000")
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -48,10 +49,10 @@ public class ProductController {
 
     }
 
-//    @PutMapping("/{id}")
-//    ResponseEntity<ResponseResult> updateProduct(@RequestBody ProductRequest newCus, @PathVariable Long id) {
-//        return productService.updateProduct(newCus,id);
-//    }
+    @PutMapping("/{id}")
+    ResponseEntity<ResponseResult> updateProduct(@ModelAttribute ProductRequest newPro, @PathVariable Long id) {
+        return productService.updateProduct(newPro,id);
+    }
 
     @DeleteMapping("/{id}")
     ResponseEntity<ResponseResult> deleteProduct(@PathVariable Long id) {

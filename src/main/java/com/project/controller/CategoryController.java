@@ -5,6 +5,7 @@ import com.project.model.Customer;
 import com.project.response.ResponseResult;
 import com.project.service.CategoryService;
 import com.project.service.CustomerService;
+import com.project.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/getAllCategory")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -48,5 +52,10 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     ResponseEntity<ResponseResult> deleteCategory(@PathVariable Long id) {
         return categoryService.deleteCategory(id);
+    }
+
+    @GetMapping("/{id}/product")
+    ResponseEntity<ResponseResult> findByCategoryId(@PathVariable Long id) {
+        return productService.findProductByCategoryId(id);
     }
 }

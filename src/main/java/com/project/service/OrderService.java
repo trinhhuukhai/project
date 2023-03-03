@@ -56,7 +56,7 @@ public class OrderService {
         order.setPayment(payment);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Order successfully",orderRepository.save(order))
+                new ResponseResult("ok", "Insert Order successfully",orderRepository.save(order),1)
         );
     }
 
@@ -78,7 +78,7 @@ public class OrderService {
                     return orderRepository.save(order);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update order successfully", updatedOrder)
+                new ResponseResult("ok", "Update order successfully", updatedOrder,1)
         );
     }
 
@@ -88,11 +88,11 @@ public class OrderService {
         if(exists) {
             orderRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete order successfully", "")
+                    new ResponseResult("ok", "Delete order successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find order to delete", "")
+                new ResponseResult("failed", "Cannot find order to delete", "",1)
         );
     }
 
@@ -101,11 +101,11 @@ public class OrderService {
         Optional<Order> foundOrder = orderRepository.findById(id);
         return foundOrder.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query order successfully", foundOrder)
+                        new ResponseResult("ok", "Query order successfully", foundOrder,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find order with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find order with id = "+id, "",1)
                 );
     }
 }

@@ -3,6 +3,7 @@ package com.project.controller;
 
 import com.project.dto.request.OrderItemRequest;
 import com.project.dto.request.ProductRequest;
+import com.project.dto.response.AllResponse;
 import com.project.model.OrderItem;
 import com.project.model.Product;
 import com.project.repository.ProductRepository;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orderItem")
+@CrossOrigin("http://localhost:3000")
 public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
@@ -32,6 +34,13 @@ public class OrderItemController {
     ResponseEntity<ResponseResult> findById(@PathVariable Long id) {
         return orderItemService.findById(id);
     }
+
+
+
+//    private AllResponse<List<Product>> getAll(){
+//        List<Product> allProduct = productService.getAllProduct();
+//        return new AllResponse<>(allProduct.size(), allProduct);
+//    }
 
     @PostMapping("/insert")
     ResponseEntity<ResponseResult> insertOrderItem(@RequestBody OrderItemRequest newItem) {

@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.dto.request.ProductRequest;
 import com.project.model.Category;
+import com.project.model.OrderItem;
 import com.project.model.Product;
 import com.project.repository.CategoryRepository;
 import com.project.repository.ProductRepository;
@@ -40,16 +41,8 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<ResponseResult> insertProduct( ProductRequest newPro) {
-        List<Product> foundPro = productRepository.findByName(newPro.getName().trim());
-
-
-        if(foundPro.size() > 0) {
-
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                    new ResponseResult("failed", "Product name already taken", "")
-            );
-        }
+    public ResponseEntity<ResponseResult> insertProduct(ProductRequest newPro) {
+//
 
         Category category = categoryRepository.findById(newPro.getCategoryId()).orElseThrow();
 
@@ -62,37 +55,37 @@ public class ProductService {
         product.setInventory(newPro.getInventory());
         product.setCategory(category);
 
-        String productImage = storageService.storageFile(newPro.getProductImage());
+        String productImage = "http://localhost:8080/api/v1/getFile/"+ storageService.storageFile(newPro.getProductImage());
 
 
         product.setProductImage(productImage);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Product successfully",productRepository.save(product))
+                new ResponseResult("ok", "Insert Product successfully",productRepository.save(product),1)
         );
-
 
     }
 
-//    public ResponseEntity<ResponseResult> updateProduct(@RequestBody ProductRequest newPro, @PathVariable Long id) {
-//
-//        Category category = categoryRepository.findById(newPro.getCategoryId()).orElseThrow();
-//        Optional<Product> updatedPro = productRepository.findById(id)
-//                .map(pro -> {
-//                    pro.setName(newPro.getName());
-//                    pro.setDescription(newPro.getDescription());
-//                    pro.setPrice(newPro.getPrice());
-//                    pro.setBrand(newPro.getBrand());
-//                    pro.setColor(newPro.getColor());
-//                    pro.setInventory(newPro.getInventory());
-//                    pro.setCategory(category);
-//                    pro.setProductImage(newPro.getProductImage());
-//                    return productRepository.save(pro);
-//                });
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseResult("ok", "Update Customer successfully", updatedPro)
-//        );
-//    }
+    public ResponseEntity<ResponseResult> updateProduct( ProductRequest newPro, Long id) {
+
+        Category category = categoryRepository.findById(newPro.getCategoryId()).orElseThrow();
+        String productImage = "http://localhost:8080/api/v1/getFile/"+ storageService.storageFile(newPro.getProductImage());
+        Optional<Product> updatedPro = productRepository.findById(id)
+                .map(pro -> {
+                    pro.setName(newPro.getName());
+                    pro.setDescription(newPro.getDescription());
+                    pro.setPrice(newPro.getPrice());
+                    pro.setBrand(newPro.getBrand());
+                    pro.setColor(newPro.getColor());
+                    pro.setInventory(newPro.getInventory());
+                    pro.setCategory(category);
+                    pro.setProductImage(productImage);
+                    return productRepository.save(pro);
+                });
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseResult("ok", "Update Customer successfully", updatedPro,1)
+        );
+    }
 
     //Delete a Product => DELETE method
     public ResponseEntity<ResponseResult> deleteProduct(@PathVariable Long id) {
@@ -100,11 +93,11 @@ public class ProductService {
         if(exists) {
             productRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete Customer successfully", "")
+                    new ResponseResult("ok", "Delete Customer successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find Customer to delete", "")
+                new ResponseResult("failed", "Cannot find Customer to delete", "",1)
         );
     }
 
@@ -113,16 +106,16 @@ public class ProductService {
         Optional<Product> foundProduct = productRepository.findById(id);
         return foundProduct.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query Customer successfully", foundProduct)
+                        new ResponseResult("ok", "Query Customer successfully", foundProduct,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "",1)
                 );
     }
 
     public Page<Product> getProductPagination(Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createdDate").descending());
         return productRepository.findAll(pageable);
     }
 
@@ -138,6 +131,17 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
+    public ResponseEntity<ResponseResult> findProductByCategoryId(@PathVariable Long id) {
+        List<Product> foundProduct = productRepository.findByCategoryId(id);
+        return !foundProduct.isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseResult("ok", "Query product item successfully", foundProduct, foundProduct.size())
+                        //you can replace "ok" with your defined "error code"
+                ):
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseResult("failed", "Cannot find product item with id = "+id, "",foundProduct.size())
+                );
+    }
         //Let's return an object with: data, message, status
     //Optional: co the null
 

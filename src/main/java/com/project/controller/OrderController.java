@@ -6,6 +6,7 @@ import com.project.model.Order;
 import com.project.model.Product;
 import com.project.repository.ProductRepository;
 import com.project.response.ResponseResult;
+import com.project.service.OrderItemService;
 import com.project.service.OrderService;
 import com.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/order")
+@CrossOrigin("http://localhost:3000")
 public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderItemService orderItemService;
 
     @GetMapping("/getOrder")
     List<Order> getAll(){
@@ -36,6 +40,11 @@ public class OrderController {
     ResponseEntity<ResponseResult> insertOrder(@RequestBody OrderRequest newOrder) {
         return orderService.insertOrder(newOrder);
 
+    }
+
+    @GetMapping("/{id}/orderItem")
+    ResponseEntity<ResponseResult> findByOrderId(@PathVariable Long id) {
+        return orderItemService.findOrderItemsByOrderId(id);
     }
 
     @PutMapping("/{id}")

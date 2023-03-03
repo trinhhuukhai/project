@@ -23,7 +23,4 @@ public class CartRequest {
 
     private Long customerId;
 
-    private Date createdDate;
-
-    private Date updatedDate;
 }

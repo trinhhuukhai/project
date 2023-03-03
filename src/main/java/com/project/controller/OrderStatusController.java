@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/order_status")
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 public class OrderStatusController {
     @Autowired

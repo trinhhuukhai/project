@@ -33,7 +33,7 @@ public class ShippingService {
 //            );
 //        }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Customer successfully", shippingRepository.save(newShip))
+                new ResponseResult("ok", "Insert Customer successfully", shippingRepository.save(newShip),1)
         );
     }
 
@@ -50,7 +50,7 @@ public class ShippingService {
                     return shippingRepository.save(newShip);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update shipping successfully", updatedShip)
+                new ResponseResult("ok", "Update shipping successfully", updatedShip,1)
         );
     }
 
@@ -60,11 +60,11 @@ public class ShippingService {
         if(exists) {
             shippingRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete Shipping successfully", "")
+                    new ResponseResult("ok", "Delete Shipping successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find Shipping to delete", "")
+                new ResponseResult("failed", "Cannot find Shipping to delete", "",1)
         );
     }
 
@@ -73,11 +73,11 @@ public class ShippingService {
         Optional<Shipping> foundShip = shippingRepository.findById(id);
         return foundShip.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query Shipping successfully", foundShip)
+                        new ResponseResult("ok", "Query Shipping successfully", foundShip,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find Shipping with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find Shipping with id = "+id, "",1)
                 );
     }
 }

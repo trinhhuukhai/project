@@ -29,11 +29,11 @@ public class CategoryService {
         List<Category> foundCate = categoryRepository.findByName(newCat.getName().trim());
         if(foundCate.size() > 0) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                    new ResponseResult("failed", "Product name already taken", "")
+                    new ResponseResult("failed", "Product name already taken", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Product successfully", categoryRepository.save(newCat))
+                new ResponseResult("ok", "Insert Product successfully", categoryRepository.save(newCat),1)
         );
     }
 
@@ -49,7 +49,7 @@ public class CategoryService {
                     return categoryRepository.save(newCate);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update category successfully", updatedCat)
+                new ResponseResult("ok", "Update category successfully", updatedCat,1)
         );
     }
 
@@ -59,11 +59,11 @@ public class CategoryService {
         if(exists) {
             categoryRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete category successfully", "")
+                    new ResponseResult("ok", "Delete category successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find category to delete", "")
+                new ResponseResult("failed", "Cannot find category to delete", "",1)
         );
     }
 
@@ -73,11 +73,11 @@ public class CategoryService {
         Optional<Category> foundCategory = categoryRepository.findById(id);
         return foundCategory.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query category successfully", foundCategory)
+                        new ResponseResult("ok", "Query category successfully", foundCategory,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find category with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find category with id = "+id, "",1)
                 );
     }
 }

@@ -12,6 +12,8 @@ import com.project.response.ResponseCode;
 import com.project.response.ResponseResult;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +51,7 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponse authenticate(AuthRequest request){
+    public  AuthResponse authenticate(AuthRequest request){
 
         authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
@@ -61,6 +63,7 @@ public class AuthService {
 
 
         var jwtToken = jwtService.generateToken(user);
+
 
         // logout tất cả các nơi đang dùng
         List<Token> listOldToken = tokenService.findAllByUsername(user.getUsername());
@@ -88,7 +91,6 @@ public class AuthService {
     public List<User> getAllUser(){
         return userRepository.findAll();
     }
-
 
 
 

@@ -30,7 +30,7 @@ public class CustomerService {
 //            );
 //        }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Customer successfully", customerRepository.save(newCus))
+                new ResponseResult("ok", "Insert Customer successfully", customerRepository.save(newCus),1)
         );
     }
 
@@ -48,7 +48,7 @@ public class CustomerService {
                     return customerRepository.save(newCus);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update Customer successfully", updatedCus)
+                new ResponseResult("ok", "Update Customer successfully", updatedCus,1)
         );
     }
 
@@ -58,11 +58,11 @@ public class CustomerService {
         if(exists) {
             customerRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete Customer successfully", "")
+                    new ResponseResult("ok", "Delete Customer successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find Customer to delete", "")
+                new ResponseResult("failed", "Cannot find Customer to delete", "",1)
         );
     }
 
@@ -71,11 +71,11 @@ public class CustomerService {
         Optional<Customer> foundProduct = customerRepository.findById(id);
         return foundProduct.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query Customer successfully", foundProduct)
+                        new ResponseResult("ok", "Query Customer successfully", foundProduct,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "",1)
                 );
     }
 }

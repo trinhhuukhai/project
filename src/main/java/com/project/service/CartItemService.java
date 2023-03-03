@@ -32,8 +32,8 @@ public class CartItemService {
     @Autowired
     private CartRepository cartRepository;
 
-    public List<Cart> getAllCart(){
-        return cartRepository.findAll();
+    public List<CartItem> getAllCart(){
+        return cartItemRepository.findAll();
     }
 
 
@@ -45,9 +45,9 @@ public class CartItemService {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setProduct(product);
-
+        cartItem.setQuantity(newCartItem.getQuantity());
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Product successfully",cartItemRepository.save(cartItem))
+                new ResponseResult("ok", "Insert Product successfully",cartItemRepository.save(cartItem),1)
         );
     }
 
@@ -61,10 +61,11 @@ public class CartItemService {
                 .map(cartItem -> {
                     cartItem.setCart(cart);
                     cartItem.setProduct(product);
+                    cartItem.setQuantity(newCartItem.getQuantity());
                     return cartItemRepository.save(cartItem);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update Customer successfully", updatedCartItem)
+                new ResponseResult("ok", "Update Customer successfully", updatedCartItem,1)
         );
     }
 
@@ -74,11 +75,11 @@ public class CartItemService {
         if(exists) {
             cartItemRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete cartItem successfully", "")
+                    new ResponseResult("ok", "Delete cartItem successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find Customer to delete", "")
+                new ResponseResult("failed", "Cannot find Customer to delete", "",1)
         );
     }
 
@@ -87,11 +88,23 @@ public class CartItemService {
         Optional<CartItem> foundCartItem = cartItemRepository.findById(id);
         return foundCartItem.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query Customer successfully", foundCartItem)
+                        new ResponseResult("ok", "Query Customer successfully", foundCartItem,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find Customer with id = "+id, "",1)
+                );
+    }
+
+    public ResponseEntity<ResponseResult> findItemByCartId(@PathVariable Long id) {
+        List<CartItem> foundCartItem = cartItemRepository.findByCartId(id);
+        return !foundCartItem.isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseResult("ok", "Query product item successfully", foundCartItem, foundCartItem.size())
+                        //you can replace "ok" with your defined "error code"
+                ):
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseResult("failed", "Cannot find product item with id = "+id, "",foundCartItem.size())
                 );
     }
 }

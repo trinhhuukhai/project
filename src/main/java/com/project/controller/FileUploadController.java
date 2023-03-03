@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/api/v1/getFile")
+@CrossOrigin("http://localhost:3000")
 public class FileUploadController {
     //this controller receive file/image from client
 
@@ -29,12 +30,12 @@ public class FileUploadController {
 
             String generatedFileName = storageService.storageFile(file);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok","upload file successfully", generatedFileName)
+                    new ResponseResult("ok","upload file successfully", generatedFileName,1)
             );
 
         }catch (Exception ex){
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                    new ResponseResult("Ok", ex.getMessage(),"")
+                    new ResponseResult("Ok", ex.getMessage(),"",1)
             );
         }
     }
@@ -65,10 +66,10 @@ public class FileUploadController {
                         return urlPath;
                     })
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(new ResponseResult("ok", "List files successfully", urls));
+            return ResponseEntity.ok(new ResponseResult("ok", "List files successfully", urls,1));
         }catch (Exception exception) {
             return ResponseEntity.ok(new
-                    ResponseResult("failed", "List files failed", new String[] {}));
+                    ResponseResult("failed", "List files failed", new String[] {},1));
         }
     }
 

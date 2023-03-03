@@ -29,11 +29,11 @@ public class OrderStatusService {
         List<OrderStatus> foundStatus = orderStatusRepository.findByName(newStatus.getName().trim());
         if(foundStatus.size() > 0) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                    new ResponseResult("failed", "status name already taken", "")
+                    new ResponseResult("failed", "status name already taken", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert status successfully", orderStatusRepository.save(newStatus))
+                new ResponseResult("ok", "Insert status successfully", orderStatusRepository.save(newStatus),1)
         );
     }
 
@@ -48,7 +48,7 @@ public class OrderStatusService {
                     return orderStatusRepository.save(newStatus);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update Customer successfully", updatedStatus)
+                new ResponseResult("ok", "Update Customer successfully", updatedStatus,1)
         );
     }
 
@@ -58,11 +58,11 @@ public class OrderStatusService {
         if(exists) {
             orderStatusRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete status successfully", "")
+                    new ResponseResult("ok", "Delete status successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find status to delete", "")
+                new ResponseResult("failed", "Cannot find status to delete", "",1)
         );
     }
 
@@ -71,11 +71,11 @@ public class OrderStatusService {
         Optional<OrderStatus> foundStatus = orderStatusRepository.findById(id);
         return foundStatus.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query status successfully", foundStatus)
+                        new ResponseResult("ok", "Query status successfully", foundStatus,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find status with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find status with id = "+id, "",1)
                 );
     }
 }

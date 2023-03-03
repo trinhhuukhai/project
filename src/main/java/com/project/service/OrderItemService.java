@@ -47,7 +47,7 @@ public class OrderItemService {
         orderItem.setPrice(newOrderItem.getPrice());
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Insert Order successfully",orderItemRepository.save(orderItem))
+                new ResponseResult("ok", "Insert Order successfully",orderItemRepository.save(orderItem),1)
         );
     }
 
@@ -67,7 +67,7 @@ public class OrderItemService {
                     return orderItemRepository.save(orderItem);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseResult("ok", "Update order successfully", updatedOrderItem)
+                new ResponseResult("ok", "Update order successfully", updatedOrderItem,1)
         );
     }
 
@@ -77,11 +77,11 @@ public class OrderItemService {
         if(exists) {
             orderItemRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseResult("ok", "Delete order item successfully", "")
+                    new ResponseResult("ok", "Delete order item successfully", "",1)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseResult("failed", "Cannot find order item to delete", "")
+                new ResponseResult("failed", "Cannot find order item to delete", "",1)
         );
     }
 
@@ -90,11 +90,23 @@ public class OrderItemService {
         Optional<OrderItem> foundOrderItem = orderItemRepository.findById(id);
         return foundOrderItem.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseResult("ok", "Query order item successfully", foundOrderItem)
+                        new ResponseResult("ok", "Query order item successfully", foundOrderItem,1)
                         //you can replace "ok" with your defined "error code"
                 ):
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new ResponseResult("failed", "Cannot find order item with id = "+id, "")
+                        new ResponseResult("failed", "Cannot find order item with id = "+id, "",1)
+                );
+    }
+
+    public ResponseEntity<ResponseResult> findOrderItemsByOrderId(@PathVariable Long id) {
+        List<OrderItem> foundOrderItem = orderItemRepository.findByOrderId(id);
+        return !foundOrderItem.isEmpty() ?
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseResult("ok", "Query order item successfully", foundOrderItem, foundOrderItem.size())
+                        //you can replace "ok" with your defined "error code"
+                ):
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ResponseResult("failed", "Cannot find order item with id = "+id, "",foundOrderItem.size())
                 );
     }
 }

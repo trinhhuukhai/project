@@ -6,6 +6,7 @@ import com.project.model.Cart;
 import com.project.model.Product;
 import com.project.repository.ProductRepository;
 import com.project.response.ResponseResult;
+import com.project.service.CartItemService;
 import com.project.service.CartService;
 import com.project.service.CustomerService;
 import com.project.service.ProductService;
@@ -17,9 +18,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@CrossOrigin("http://localhost:3000")
 public class CartController {
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @GetMapping("/getAllCart")
     List<Cart> getAll(){
@@ -29,7 +34,10 @@ public class CartController {
     @PostMapping("/insert")
     ResponseEntity<ResponseResult> insertProduct(@RequestBody CartRequest newCart) {
         return cartService.insertCart(newCart);
-
     }
 
+    @GetMapping("/{id}/cartItem")
+    ResponseEntity<ResponseResult> findItemByCartId(@PathVariable Long id) {
+        return cartItemService.findItemByCartId(id);
+    }
 }

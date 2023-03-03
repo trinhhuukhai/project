@@ -33,4 +33,6 @@ public class Shipping {
     @Column(name = "shipping_date")
     @CreationTimestamp
     private Date shippingDate;
+
+
 }
